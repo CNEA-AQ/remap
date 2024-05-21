@@ -1,0 +1,79 @@
+
+character(len=*) :: varList(54)
+character(len=*) :: varType(54)  !'int','float','double'
+character(len=*) :: gridName(54) !'T-grid'    = "XLONG XLAT XTIME" 
+                                 !'U-grid'    = (bottom_top     , south_north     , west_east_stag)
+                                 !'V-grid'    = (bottom_top     , south_north_stag, west_east     )
+                                 !'W-grid'    = (bottom_top_stag, south_north_stag, west_east     )
+                                 !'soil-grid' = "SMOIS" 
+                                 !'coord'     = "XLAT", "XLONG", "XLAT_U", "XLONG_U", "XLAT_V", "XLONG_V"
+                                 !'Z-grids'   = "ZNU","ZNW", "ZS" (eta values on half (mass), full (w) levels, DEPTHS OF CENTERS OF SOIL LAYERS.
+                                 !'coord_Time = "Times"
+!Dimensions: 
+!   Time = UNLIMITED ; // (1 currently)
+!   south_north = 1249 ;
+!   west_east = 999 ;
+!   bottom_top = 44 ;
+!   west_east_stag = 1000 ;
+!   south_north_stag = 1250 ;
+!   bottom_top_stag = 45 ;
+!   soil_layers_stag = 4 ;
+!   DateStrLen = 19 ;
+
+data varList( 1), varTyp( 1), gridName( 1) / "Times    ", "float", "T-Grid" / 
+data varList( 2), varTyp( 2), gridName( 2) / "ZS       ", "float", "T-Grid" / 
+data varList( 3), varTyp( 3), gridName( 3) / "ZNU      ", "float", "T-Grid" / 
+data varList( 4), varTyp( 4), gridName( 4) / "ZNW      ", "float", "T-Grid" / 
+data varList( 5), varTyp( 5), gridName( 5) / "XLONG    ", "float", "T-Grid" / 
+data varList( 6), varTyp( 6), gridName( 6) / "XLAT     ", "float", "T-Grid" / 
+data varList( 7), varTyp( 7), gridName( 7) / "XLONG_U  ", "float", "T-Grid" / 
+data varList( 8), varTyp( 8), gridName( 8) / "XLAT_U   ", "float", "T-Grid" / 
+data varList( 9), varTyp( 9), gridName( 9) / "XLONG_V  ", "float", "T-Grid" / 
+data varList(10), varTyp(10), gridName(10) / "XLAT_V   ", "float", "T-Grid" / 
+data varList(11), varTyp(11), gridName(11) / "MAPFAC_UX", "float", "U-Grid" / 
+data varList(12), varTyp(12), gridName(12) / "MAPFAC_UY", "float", "U-Grid" / 
+data varList(13), varTyp(13), gridName(13) / "MAPFAC_VX", "float", "V-Grid" / 
+data varList(14), varTyp(14), gridName(14) / "MAPFAC_VY", "float", "V-Grid" / 
+data varList(15), varTyp(15), gridName(15) / "MAPFAC_MX", "float", "T-Grid" / 
+data varList(16), varTyp(16), gridName(16) / "MAPFAC_MY", "float", "T-Grid" / 
+data varList(17), varTyp(17), gridName(17) / "P_HYD    ", "float", "T-Grid" / 
+data varList(18), varTyp(18), gridName(18) / "P_TOP    ", "float", "T-Grid" / 
+data varList(19), varTyp(19), gridName(19) / "PH       ", "float", "T-Grid" / 
+data varList(20), varTyp(20), gridName(20) / "PHB      ", "float", "T-Grid" / 
+data varList(21), varTyp(21), gridName(21) / "P        ", "float", "T-Grid" / 
+data varList(22), varTyp(22), gridName(22) / "PB       ", "float", "T-Grid" / 
+data varList(23), varTyp(23), gridName(23) / "U        ", "float", "T-Grid" / 
+data varList(24), varTyp(24), gridName(24) / "V        ", "float", "T-Grid" / 
+data varList(25), varTyp(25), gridName(25) / "W        ", "float", "T-Grid" / 
+data varList(26), varTyp(26), gridName(26) / "T        ", "float", "T-Grid" / 
+data varList(27), varTyp(27), gridName(27) / "QVAPOR   ", "float", "T-Grid" / 
+data varList(28), varTyp(28), gridName(28) / "QCLOUD   ", "float", "T-Grid" / 
+data varList(29), varTyp(29), gridName(29) / "QICE     ", "float", "T-Grid" / 
+data varList(30), varTyp(30), gridName(30) / "QRAIN    ", "float", "T-Grid" / 
+data varList(31), varTyp(31), gridName(31) / "QSNOW    ", "float", "T-Grid" / 
+data varList(32), varTyp(32), gridName(32) / "QGRAUP   ", "float", "T-Grid" / 
+data varList(33), varTyp(33), gridName(33) / "CLDFRA   ", "float", "T-Grid" / 
+data varList(34), varTyp(34), gridName(34) / "T2       ", "float", "T-Grid" / 
+data varList(35), varTyp(35), gridName(35) / "Q2       ", "float", "T-Grid" / 
+data varList(36), varTyp(36), gridName(36) / "U10      ", "float", "T-Grid" / 
+data varList(37), varTyp(37), gridName(37) / "V10      ", "float", "T-Grid" / 
+data varList(38), varTyp(38), gridName(38) / "PSFC     ", "float", "T-Grid" / 
+data varList(39), varTyp(39), gridName(39) / "RAINC    ", "float", "T-Grid" / 
+data varList(40), varTyp(40), gridName(40) / "RAINNC   ", "float", "T-Grid" / 
+data varList(41), varTyp(41), gridName(41) / "LANDMASK ", "float", "T-Grid" / 
+data varList(42), varTyp(42), gridName(42) / "HGT      ", "float", "T-Grid" / 
+data varList(43), varTyp(43), gridName(43) / "SST      ", "float", "T-Grid" / 
+data varList(44), varTyp(44), gridName(44) / "PBLH     ", "float", "T-Grid" / 
+data varList(45), varTyp(45), gridName(45) / "HFX      ", "float", "T-Grid" / 
+data varList(46), varTyp(46), gridName(46) / "LH       ", "float", "T-Grid" / 
+data varList(47), varTyp(47), gridName(47) / "LAI      ", "float", "T-Grid" / 
+data varList(48), varTyp(48), gridName(48) / "SWDOWN   ", "float", "T-Grid" / 
+data varList(49), varTyp(49), gridName(49) / "GLW      ", "float", "T-Grid" / 
+data varList(50), varTyp(50), gridName(50) / "LU_INDEX ", "float", "T-Grid" / 
+data varList(51), varTyp(51), gridName(51) / "ALBEDO   ", "float", "T-Grid" / 
+data varList(52), varTyp(52), gridName(52) / "SEAICE   ", "float", "T-Grid" / 
+data varList(53), varTyp(53), gridName(53) / "SNOW     ", "float", "T-Grid" / 
+data varList(54), varTyp(54), gridName(54) / "SMOIS    ", "float", "T-Grid" / 
+data varList(55), varTyp(55), gridName(55) / "SINALPHA ", "float", "T-Grid" / 
+data varList(56), varTyp(56), gridName(56) / "COSALPHA ", "float"  "T-Grid" / 
+

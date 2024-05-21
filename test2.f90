@@ -10,6 +10,17 @@ program test
    character(len=256) :: method
    real, allocatable :: var1(:,:),var2(:,:)
    ifile='in.nc'
+
+    ifile='/media/usuario/cnea_ram/WRFE/2023112400/01/wrfout_d01_2023-11-24_00_00_00' !'wrfout_d01_20XX-XX-XX_XX:00:00.nc'
+!   ncks -v Times,ZS,ZNU,ZNW,XLONG,XLAT,XLONG_U,XLAT_U,XLONG_V,XLAT_V,MAPFAC_UX,MAPFAC_UY,MAPFAC_VX,MAPFAC_VY,MAPFAC_MX,MAPFAC_MY,P_HYD,P_TOP,PH,PHB,P,PB,U,V,W,T,QVAPOR,QCLOUD,QICE,QRAIN,QSNOW,QGRAUP,CLDFRA,T2,Q2,U10,V10,PSFC,RAINC,RAINNC,LANDMASK,HGT,SST,PBLH,HFX,LH,LAI,SWDOWN,GLW,LU_INDEX,ALBEDO,SEAICE,SNOW,SMOIS,SINALPHA,COSALPHA  wrfout_input subset_wrfout
+
+    var_list=["Times","ZS","ZNU","ZNW","XLONG","XLAT","XLONG_U","XLAT_U","XLONG_V","XLAT_V","MAPFAC_UX","MAPFAC_UY","MAPFAC_VX","MAPFAC_VY","MAPFAC_MX","MAPFAC_MY","P_HYD","P_TOP","PH","PHB","P","PB","U","V","W","T","QVAPOR","QCLOUD","QICE","QRAIN","QSNOW","QGRAUP","CLDFRA","T2","Q2","U10","V10","PSFC","RAINC","RAINNC","LANDMASK","HGT","SST","PBLH","HFX","LH","LAI","SWDOWN","GLW","LU_INDEX","ALBEDO","SEAICE","SNOW","SMOIS","SINALPHA","COSALPHA"]
+    typ_list=[]
+    call get_grid_and_proj_from_wrf(inp_file,g,p)
+
+    do i=1,size(var_list)
+        call SCRIP_remap_field(var1,var2,g1,g2,method)
+    enddo
  
    call system('echo "                                          "');  
    call system('echo "(!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!)"');  
@@ -21,27 +32,27 @@ program test
 
    !***************************
    !src grids specs:
-   g1%gridName='testgrid'
-   g1%proj4="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs" !'+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
-   g1%nx=360     !
-   g1%ny=180     !
-   g1%dx= 1.0    !
-   g1%dy= 1.0    !
-   g1%ymin=-90   !
-   g1%xmin=-180  !
+   call get_gird_and_proj_from_wrfout(ifile, g1)
+   !g1%gridName='testgrid'
+   !g1%proj4="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs" !'+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
+   !g1%nx=360     !
+   !g1%ny=180     !
+   !g1%dx= 1.0    !
+   !g1%dy= 1.0    !
+   !g1%ymin=-90   !
+   !g1%xmin=-180  !
    allocate(var1(g1%nx,g1%ny))
-   call makeFieldTest(g1,var1)            !dummy test field
-   call saveArrayOnNetCDF(iFile,g1,var1)
    !***************************
    !dst grid specs (silam grid):
-   g2%gridName="silamgrid"
-   g2%proj4="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
-   g2%nx=36     !g2%nx=360     !g2%nx=50      !
-   g2%ny=18     !g2%ny=180     !g2%ny=63      !
-   g2%dx=10.0   !g2%xmin=-180  !g2%xmin=-72.0 !
-   g2%dy=10.0   !g2%ymin=-90   !g2%ymin=-54.0 !
-   g2%ymin=-90  !g2%dx=1.0     !g2%dx=0.4     !
-   g2%xmin=-180 !g2%dy=1.0     !g2%dy=0.4     !
+   call get_gird_and_proj_from_wrfout(ref_file, g2)
+   !g2%gridName="silamgrid"
+   !g2%proj4="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
+   !g2%nx=36     !g2%nx=360     !g2%nx=50      !
+   !g2%ny=18     !g2%ny=180     !g2%ny=63      !
+   !g2%dx=10.0   !g2%xmin=-180  !g2%xmin=-72.0 !
+   !g2%dy=10.0   !g2%ymin=-90   !g2%ymin=-54.0 !
+   !g2%ymin=-90  !g2%dx=1.0     !g2%dx=0.4     !
+   !g2%xmin=-180 !g2%dy=1.0     !g2%dy=0.4     !
    allocate(var2(g2%nx,g2%ny))
 
    !!test Bilinear   
@@ -72,7 +83,6 @@ program test
    print*, "Conserv Remaping succesfull!"
    call saveArrayOnNetCDF(oFile,g2,var2)
 
-
    !(Again to see if is faster once it has the remaping files)
    !!!!test Bicubic
    method='bicubic'
@@ -90,6 +100,22 @@ program test
 
 
    print*, "Fin de la prueba."
+
+   !================================================
+   ! Test 2: Remapear variables de NetCDF (wrfout)
+
+
+
+
+
+
+
+
+
+
+
+
+
 contains
 
    subroutine makeFieldTest(g,var)
@@ -138,11 +164,9 @@ contains
            idx=idx+1
         enddo
       enddo                                                                    
-      call proj_trans(g%proj4, proj4_latlon, lon , lat, g%nx*g%ny) !grid_size)
-      !lon=[ (g%xmin+0.5*g%dx+i*g%dx, i=0, g%nx-1,1) ]
-      !lat=[ (g%ymin+0.5*g%dy+i*g%dy, i=0, g%ny-1,1) ]
+      call proj_trans(g%proj4, proj4_latlon, lon , lat)!, g%nx*g%ny) !grid_size)
 
-print*,"write NETCDF"
+      print*,"write NETCDF"
       stat=nf90_create(ncFile, NF90_CLOBBER, ncid)
           !! Defino dimensiones
           stat=nf90_def_dim(ncid, "x" , g%nx ,   x_dim_id )
@@ -161,15 +185,10 @@ print*,"write NETCDF"
           stat=nf90_put_att(ncid, var_id, "long_name"      , "var mass flux"       )
       stat=nf90_enddef(ncid)
       !Abro NetCDF outFile
-print*,"pongo variables"
       stat=nf90_open(ncFile, nf90_write, ncid)
          stat=nf90_inq_varid(ncid, 'var', var_id); stat=nf90_put_var(ncid, var_id, var(:,:)) 
-print*,"pongo variables lat"
          stat=nf90_inq_varid(ncid, "lat", var_id); stat=nf90_put_var(ncid, var_id, reshape(lat,[g%nx,g%ny]))!lat(:)) !
-print*,"pongo variables lon"                                                                                !         
          stat=nf90_inq_varid(ncid, "lon", var_id); stat=nf90_put_var(ncid, var_id, reshape(lon,[g%nx,g%ny]))!lon(:)) !
-
-print*,"pongo variables fin"
       stat=nf90_close(ncid)
       !Cierro NetCDF outFile
    end subroutine
@@ -297,19 +316,5 @@ print*,"pongo variables fin"
 !=
 !=end subroutine
 !=!================================================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 end program

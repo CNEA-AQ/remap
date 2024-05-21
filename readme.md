@@ -1,4 +1,4 @@
-# REMAP
+# remap
 
 > Herramienta de remapeo e interpolación de arrays para fortran, basado en SCRIP. Pensado como módulo para modelos numéricos ó como herramienta para regrillar salidas de WRF.
 
@@ -6,7 +6,36 @@
 ## Dependencias:
 
 - NetCDF Library
-- PROJ   Library (https://proj.org/) 
+- [PROJ Library](https://proj.org/) 
+
+
+## Remap methods:
+
+
+Interpolation methods: (from coarser to finer grids)
+
+| Method      | field-type  | Implemented? | 
+|-------------|-------------|--------------| 
+|Bilinear     |             | [x]          | 
+|Bicubic      |             | [x]          | 
+|Cubic-spline |             | [ ]          | 
+|Conserv. 1   |             | [x]          | 
+|Conserv. 2   |             | [x]          | 
+
+
+Remaping methods (from finer to coarser):
+
+| Method      | field-type  | Implemented? | 
+|-------------|-------------|--------------| 
+|             |             | [ ]          | 
+|             |             | [ ]          | 
+|             |             | [ ]          | 
+|             |             | [ ]          | 
+|             |             | [ ]          | 
+|             |             | [ ]          | 
+|             |             | [ ]          | 
+
+
 
 ## Compilación
 
@@ -52,9 +81,6 @@ donde:
    - g1 es una estructura (`type`) que contiene la información de la grilla fuente.
    - g2 es una estructura (`type`) que contiene la información de la grilla destino.
    - méthod es el método de remapeo (bilinear, bicubic, diswgt, ó conservative).
-
-
-
 
 ## Próximas mejoras
 

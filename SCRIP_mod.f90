@@ -154,8 +154,6 @@ subroutine SCRIP_remap_1d_field(grid1_array,grid2_array,g1,g2,method)
       !-----------------------------------------------------------------------
       call grid2gridFile(g1)  !src gridFile 
       call grid2gridFile(g2)  !src gridFile 
-      !call grid2gridFile(g1,g2)  !src gridFile 
-      !call grid2gridFile(g2,g2)  !dst gridFile
       !-----------------------------------------------------------------------
       !  initialize grid information for both grids
       !-----------------------------------------------------------------------
@@ -241,12 +239,12 @@ subroutine SCRIP_remap_1d_field(grid1_array,grid2_array,g1,g2,method)
    if ( allocated(grid1_centroid_lon  )) deallocate(grid1_centroid_lon  ) !from grid_init (grid.f)
    if ( allocated(grid2_centroid_lon  )) deallocate(grid2_centroid_lon  ) !from grid_init (grid.f)
 
-   if ( allocated(wts_map1         )) deallocate(wts_map1               ) !from init_remap_vars (remap_vars.f)
-   if ( allocated(wts_map2         )) deallocate(wts_map2               ) !from init_remap_vars (remap_vars.f)
-   if ( allocated(grid1_add_map1   )) deallocate(grid1_add_map1         ) !from init_remap_vars (remap_vars.f)
-   if ( allocated(grid2_add_map1   )) deallocate(grid2_add_map1         ) !from init_remap_vars (remap_vars.f)
-   if ( allocated(grid1_add_map2   )) deallocate(grid1_add_map2         ) !from init_remap_vars (remap_vars.f)
-   if ( allocated(grid2_add_map2   )) deallocate(grid2_add_map2         ) !from init_remap_vars (remap_vars.f)
+   if ( allocated(wts_map1            )) deallocate(wts_map1            ) !from init_remap_vars (remap_vars.f)
+   if ( allocated(wts_map2            )) deallocate(wts_map2            ) !from init_remap_vars (remap_vars.f)
+   if ( allocated(grid1_add_map1      )) deallocate(grid1_add_map1      ) !from init_remap_vars (remap_vars.f)
+   if ( allocated(grid2_add_map1      )) deallocate(grid2_add_map1      ) !from init_remap_vars (remap_vars.f)
+   if ( allocated(grid1_add_map2      )) deallocate(grid1_add_map2      ) !from init_remap_vars (remap_vars.f)
+   if ( allocated(grid2_add_map2      )) deallocate(grid2_add_map2      ) !from init_remap_vars (remap_vars.f)
 
    return
 end subroutine
@@ -312,11 +310,11 @@ subroutine grid2gridFile(g1)
 
       !transform to latlon
       if (trim(g1%proj4) /= trim(proj4_latlon)) then !g2%proj4) then
-         call proj_trans(g1%proj4, proj4_latlon, center_x     , center_y     , grid_size)     !  4---------------3 
-         call proj_trans(g1%proj4, proj4_latlon, corner_x(1,:), corner_y(1,:), grid_size)     !   \             /
-         call proj_trans(g1%proj4, proj4_latlon, corner_x(2,:), corner_y(2,:), grid_size)     !    \     o     /
-         call proj_trans(g1%proj4, proj4_latlon, corner_x(3,:), corner_y(3,:), grid_size)     !     \         /
-         call proj_trans(g1%proj4, proj4_latlon, corner_x(4,:), corner_y(4,:), grid_size)     !      1-------2
+         call proj_trans(g1%proj4, proj4_latlon, center_x     , center_y     ) !, grid_size)     !  4---------------3 
+         call proj_trans(g1%proj4, proj4_latlon, corner_x(1,:), corner_y(1,:)) !, grid_size)     !   \             /
+         call proj_trans(g1%proj4, proj4_latlon, corner_x(2,:), corner_y(2,:)) !, grid_size)     !    \     o     /
+         call proj_trans(g1%proj4, proj4_latlon, corner_x(3,:), corner_y(3,:)) !, grid_size)     !     \         /
+         call proj_trans(g1%proj4, proj4_latlon, corner_x(4,:), corner_y(4,:)) !, grid_size)     !      1-------2
       endif
 
       !mask cells outside silam domain:   !!REVISAR ESTO!!
