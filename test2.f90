@@ -101,20 +101,6 @@ program test
 
    print*, "Fin de la prueba."
 
-   !================================================
-   ! Test 2: Remapear variables de NetCDF (wrfout)
-
-
-
-
-
-
-
-
-
-
-
-
 
 contains
 
