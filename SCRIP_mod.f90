@@ -87,11 +87,11 @@ subroutine SCRIP_remap_1d_field(grid1_array,grid2_array,g1,g2,method)
    print*,"[SCRIP]: Asked to map field from grid '",g1%gridName,"' to grid '",g2%gridName,"' using '",trim(method),"' method."
    print*," "
 
-   gridFile1="grd_"//trim(g1%gridName)//".nc"
-   gridFile2="grd_"//trim(g2%gridName)//".nc"
+   gridFile1  ="grd_"//trim(g1%gridName)//".nc"
+   gridFile2  ="grd_"//trim(g2%gridName)//".nc"
 
-   mapName1=trim(g1%gridName)//"_to_"//trim(g2%gridName)//"_"//trim(method)                 
-   mapName2=trim(g2%gridName)//"_to_"//trim(g1%gridName)//"_"//trim(method)                
+   mapName1   =trim(g1%gridName)//"_to_"//trim(g2%gridName)//"_"//trim(method)
+   mapName2   =trim(g2%gridName)//"_to_"//trim(g1%gridName)//"_"//trim(method)
 
    interpFile1="rmp_"//trim(mapName1)//".nc" 
    interpFile2="rmp_"//trim(mapName2)//".nc"

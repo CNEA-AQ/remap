@@ -11,29 +11,24 @@
 
 ## Remap methods:
 
-
 Interpolation methods: (from coarser to finer grids)
 
 | Method      | field-type  | Implemented? | 
 |-------------|-------------|--------------| 
-|Bilinear     |             | [x]          | 
-|Bicubic      |             | [x]          | 
-|Cubic-spline |             | [ ]          | 
-|Conserv. 1   |             | [x]          | 
-|Conserv. 2   |             | [x]          | 
-
+|Bilinear     | float       | [x]          | 
+|Bicubic      | float       | [x]          | 
+|Cubic-spline | float       | [ ]          | 
+|Conserv. 1   | float       | [x]          | 
+|Conserv. 2   | float       | [x]          | 
+|Nearest N.   | integer     | [x]          | 
 
 Remaping methods (from finer to coarser):
 
 | Method      | field-type  | Implemented? | 
 |-------------|-------------|--------------| 
-|             |             | [ ]          | 
-|             |             | [ ]          | 
-|             |             | [ ]          | 
-|             |             | [ ]          | 
-|             |             | [ ]          | 
-|             |             | [ ]          | 
-|             |             | [ ]          | 
+| Average     | float       | [ ]          | 
+| Weighted Avg| float       | [x]          | 
+| Mode        | integer     | [ ]          | 
 
 
 
@@ -55,15 +50,6 @@ make
 
 ## Ejecución
 
-
-### Cómo programa:
-
-(todavia no definido)
-
-
-### Cómo módulo:
-
-
 Cómo módulo, es necesario sólo llamarlo desde tu programa con:
 ```fortran
 use SCRIP_mod 
@@ -76,17 +62,17 @@ call remap_field(arr1,arr2,g1,g2,method)
 ```
 
 donde:
-   - arr1 es el array fuente (rango-1 ó rango-2) a ser remapeado.
-   - arr2 es el array destino (rango-1 ó rango-2).
-   - g1 es una estructura (`type`) que contiene la información de la grilla fuente.
-   - g2 es una estructura (`type`) que contiene la información de la grilla destino.
-   - méthod es el método de remapeo (bilinear, bicubic, diswgt, ó conservative).
+  - arr1 es el array fuente (rango-1 ó rango-2) a ser remapeado.
+  - arr2 es el array destino (rango-1 ó rango-2).
+  - g1 es una estructura (*type*) que contiene la información de la grilla fuente.
+  - g2 es una estructura (*type*) que contiene la información de la grilla destino.
+  - méthod es el método de remapeo (bilinear, bicubic, diswgt, ó conservative).
 
 ## Próximas mejoras
 
-[ ] Terminar la versión `standalone`
-[ ] Dar soporte para remapeo de archivos de wrf directamente.
-[ ] Producir los grid_types a partir de leer el archivo de entrada (wrf, cmaq o griddesc).
-[ ] Dar soporte a grillas logicamente no regulares.
+- [ ] Terminar la versión `standalone`
+- [ ] Dar soporte para remapeo de archivos de wrf directamente.
+- [ ] Producir los `grid_types` a partir de leer el archivo de entrada (wrf, cmaq o griddesc).
+- [ ] Dar soporte a grillas logicamente no regulares.
 
 

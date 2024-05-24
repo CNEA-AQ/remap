@@ -1,166 +1,59 @@
 
-character(len=*) ::  varList(46)
-character(len=*) ::  varType(46) !'int','float','double'
-character(len=*) :: gridName(46) !'T-grid'    = "XLONG XLAT XTIME" 
+character(len=*) :: varList(46)
+character(len=*) ::  varTyp(46) !'int','float','double'
+character(len=*) :: gridTyp(46) !'T-grid'    = "XLONG XLAT XTIME" 
                                  !'U-grid'    = (bottom_top     , south_north     , west_east_stag)
                                  !'V-grid'    = (bottom_top     , south_north_stag, west_east     )
                                  !'W-grid'    = (bottom_top_stag, south_north_stag, west_east     )
                                  !'soil-grid' = "SMOIS" 
                                  !'coord'     = "XLAT", "XLONG", "XLAT_U", "XLONG_U", "XLAT_V", "XLONG_V"
-                                 !'Z-grids'   = "ZNU","ZNW", "ZS" (eta values on half (mass), full (w) levels, DEPTHS OF CENTERS OF SOIL LAYERS.
+                                 !'Z-grids'   = "ZNU","ZNW","ZS" (eta values on half (mass), full (w) levels, DEPTHS OF CENTERS OF SOIL LAYERS.
                                  !'coord_Time = "Times"
 
-data varList( 1), varTyp( 1), gridName( 1) / "MAPFAC_UX", "float", "U-Grid" / 
-data varList( 2), varTyp( 2), gridName( 2) / "MAPFAC_UY", "float", "U-Grid" / 
-data varList( 3), varTyp( 3), gridName( 3) / "MAPFAC_VX", "float", "V-Grid" / 
-data varList( 4), varTyp( 4), gridName( 4) / "MAPFAC_VY", "float", "V-Grid" / 
-data varList( 5), varTyp( 5), gridName( 5) / "MAPFAC_MX", "float", "M-Grid" / 
-data varList( 6), varTyp( 6), gridName( 6) / "MAPFAC_MY", "float", "M-Grid" / 
-data varList( 7), varTyp( 7), gridName( 7) / "P_HYD    ", "float", "M-Grid" / 
-data varList( 8), varTyp( 8), gridName( 8) / "P_TOP    ", "float", "M-Grid" / 
-data varList( 9), varTyp( 9), gridName( 9) / "PH       ", "float", "M-Grid" / !bottom_top_stag 
-data varList(10), varTyp(10), gridName(10) / "PHB      ", "float", "M-Grid" / !bottom_top_stag
-data varList(11), varTyp(11), gridName(11) / "P        ", "float", "M-Grid" / 
-data varList(12), varTyp(12), gridName(12) / "PB       ", "float", "M-Grid" / 
-data varList(13), varTyp(13), gridName(13) / "U        ", "float", "U-Grid" / 
-data varList(14), varTyp(14), gridName(14) / "V        ", "float", "V-Grid" / 
-data varList(15), varTyp(15), gridName(15) / "W        ", "float", "W-Grid" / 
-data varList(16), varTyp(16), gridName(16) / "T        ", "float", "M-Grid" / 
-data varList(17), varTyp(17), gridName(17) / "QVAPOR   ", "float", "M-Grid" / 
-data varList(18), varTyp(18), gridName(18) / "QCLOUD   ", "float", "M-Grid" / 
-data varList(19), varTyp(19), gridName(19) / "QICE     ", "float", "M-Grid" / 
-data varList(20), varTyp(20), gridName(20) / "QRAIN    ", "float", "M-Grid" / 
-data varList(21), varTyp(21), gridName(21) / "QSNOW    ", "float", "M-Grid" / 
-data varList(22), varTyp(22), gridName(22) / "QGRAUP   ", "float", "M-Grid" / 
-data varList(23), varTyp(23), gridName(23) / "CLDFRA   ", "float", "M-Grid" / 
-data varList(24), varTyp(24), gridName(24) / "T2       ", "float", "M-Grid" / 
-data varList(25), varTyp(25), gridName(25) / "Q2       ", "float", "M-Grid" / 
-data varList(26), varTyp(26), gridName(26) / "U10      ", "float", "M-Grid" / 
-data varList(27), varTyp(27), gridName(27) / "V10      ", "float", "M-Grid" / 
-data varList(28), varTyp(28), gridName(28) / "PSFC     ", "float", "M-Grid" / 
-data varList(29), varTyp(29), gridName(29) / "RAINC    ", "float", "M-Grid" / 
-data varList(30), varTyp(30), gridName(30) / "RAINNC   ", "float", "M-Grid" / 
-data varList(31), varTyp(31), gridName(31) / "LANDMASK ", "float", "M-Grid" / 
-data varList(32), varTyp(32), gridName(32) / "HGT      ", "float", "M-Grid" / 
-data varList(33), varTyp(33), gridName(33) / "SST      ", "float", "M-Grid" / 
-data varList(34), varTyp(34), gridName(34) / "PBLH     ", "float", "M-Grid" / 
-data varList(35), varTyp(35), gridName(35) / "HFX      ", "float", "M-Grid" / 
-data varList(36), varTyp(36), gridName(36) / "LH       ", "float", "M-Grid" / 
-data varList(37), varTyp(37), gridName(37) / "LAI      ", "float", "M-Grid" / 
-data varList(38), varTyp(38), gridName(38) / "SWDOWN   ", "float", "M-Grid" / 
-data varList(39), varTyp(39), gridName(39) / "GLW      ", "float", "M-Grid" / 
-data varList(40), varTyp(40), gridName(40) / "LU_INDEX ", "float", "M-Grid" / 
-data varList(41), varTyp(41), gridName(41) / "ALBEDO   ", "float", "M-Grid" / 
-data varList(42), varTyp(42), gridName(42) / "SEAICE   ", "float", "M-Grid" / 
-data varList(43), varTyp(43), gridName(43) / "SNOW     ", "float", "M-Grid" / 
-data varList(44), varTyp(44), gridName(44) / "SMOIS    ", "float", "S-Grid" / 
-data varList(45), varTyp(45), gridName(45) / "SINALPHA ", "float", "M-Grid" / 
-data varList(46), varTyp(46), gridName(46) / "COSALPHA ", "float"  "M-Grid" / 
-
-
-!===========================================================================
-call check(nf90_open(trim(inp_file), nf90_write, ncid ))
-
-  !Dimensions: 
-  !DateStrLen          = 19;
-  call check( nf90_inq_dimid(ncid, "Time"            , dimid)); call check( nf90_inquire_dimension(ncid, dimid, len=Time             )) ! Time = UNLIMITED ; // (1 currently)
-  call check( nf90_inq_dimid(ncid, "south_north"     , dimid)); call check( nf90_inquire_dimension(ncid, dimid, len=south_north      )) ! south_north         = 1249 ;
-  call check( nf90_inq_dimid(ncid, "west_east"       , dimid)); call check( nf90_inquire_dimension(ncid, dimid, len=west_east        )) ! west_east           = 999 ;
-  call check( nf90_inq_dimid(ncid, "bottom_top"      , dimid)); call check( nf90_inquire_dimension(ncid, dimid, len=bottom_top       )) ! bottom_top          = 44 ;
-  call check( nf90_inq_dimid(ncid, "west_east_stag"  , dimid)); call check( nf90_inquire_dimension(ncid, dimid, len=west_east_stag   )) ! west_east_stag      = 1000 ;
-  call check( nf90_inq_dimid(ncid, "south_north_stag", dimid)); call check( nf90_inquire_dimension(ncid, dimid, len=south_north_stag )) ! south_north_stag    = 1250 ;
-  call check( nf90_inq_dimid(ncid, "bottom_top_stag" , dimid)); call check( nf90_inquire_dimension(ncid, dimid, len=bottom_top_stag  )) ! bottom_top_stag      = 45 ;
-  call check( nf90_inq_dimid(ncid, "soil_layers_stag", dimid)); call check( nf90_inquire_dimension(ncid, dimid, len=soil_layers_stag )) ! soil_layers_stag      = 4 ;
-
-  !Global attributes
-  call check(nf90_get_att(ncid, NF90_GLOBAL, "temporal_average", temporal_avg) )
-  call check(nf90_get_att(ncid, NF90_GLOBAL, "temporal_average", temporal_avg) )
-  call check(nf90_get_att(ncid, NF90_GLOBAL, "temporal_average", temporal_avg) )
-  call check(nf90_get_att(ncid, NF90_GLOBAL, "temporal_average", temporal_avg) )
-  call check(nf90_get_att(ncid, NF90_GLOBAL, "temporal_average", temporal_avg) )
-  call check(nf90_get_att(ncid, NF90_GLOBAL, "temporal_average", temporal_avg) )
-  call check(nf90_get_att(ncid, NF90_GLOBAL, "temporal_average", temporal_avg) )
-
-  !GRID:
-  :WEST-EAST_GRID_DIMENSION = 1000 ;
-  :SOUTH-NORTH_GRID_DIMENSION = 1250 ;
-  :BOTTOM-TOP_GRID_DIMENSION = 45 ;
-
-  call check(nf90_get_att(ncid, NF90_GLOBAL, "DX", grid%dx) )
-  call check(nf90_get_att(ncid, NF90_GLOBAL, "DY", grid%dy) )
-  call check(nf90_get_att(ncid, NF90_GLOBAL, "DX", grid%dx) )
-  call check(nf90_get_att(ncid, NF90_GLOBAL, "DX", grid%dx) )
-
-
-  !PROJECTION:
-   call check(nf90_get_att(ncid, NF90_GLOBAL, "MAP_PROJ", proj_id) ) !1: lcc  2: stere 3: merc  6: latlon
-   call check(nf90_get_att(ncid, NF90_GLOBAL, "MAP_PROJ", CEN_LAT  )) 
-   call check(nf90_get_att(ncid, NF90_GLOBAL, "MAP_PROJ", CEN_LON  )) 
-   call check(nf90_get_att(ncid, NF90_GLOBAL, "MAP_PROJ", TRUELAT1 )) 
-   call check(nf90_get_att(ncid, NF90_GLOBAL, "MAP_PROJ", TRUELAT2 )) 
-   call check(nf90_get_att(ncid, NF90_GLOBAL, "MAP_PROJ", STAND_LON)) 
-
-   "+proj=lcc     +a=6370000.0 +b=6370000.0 +lat_1=TRUELAT1  +lat_2=TRUELAT2      +lat_0=CEN_LAT +lon_0=STAND_LON
-   "+proj=stere   +a=6370000.0 +b=6370000.0 +lat_0=TRUELAT1  +lon_0=STAND_LON     +lat_ts=TRUELAT1    
-   "+proj=merc    +a=6370000.0 +b=6370000.0 +lon_0=STAND_LON +lat_ts=CEN_LAT                     
-   "+proj=latlong +a=6370000.0 +b=6370000.0"
-
-   "+proj=lcc     +a=6370000.0 +b=6370000.0 +lat_1=33 +lat_2=45 +lat_0=40 +lon_0=-97", TRUELAT1,TRUELAT2,CEN_LAT,CEN_LON
-   "+proj=stere   +a=6370000.0 +b=6370000.0 +lat_ts=33 +lat_0=90 +lon_0=-97 +k_0=1.0"
-   "+proj=merc    +a=6370000.0 +b=6370000.0 +lat_ts=33 +lon_0=0"
-   "+proj=latlong +a=6370000.0 +b=6370000.0"
-
-  allocate( Times(Time)) ;
-  allocate(    XLAT(south_north, west_east     )) ;!Time, 
-  allocate(  XLAT_U(south_north, west_east_stag)) ;!Time, 
-  allocate(  XLAT_V(south_north_stag, west_east)) ;!Time, 
-  allocate(   XLONG(south_north, west_east     )) ;!Time, 
-  allocate( XLONG_U(south_north, west_east_stag)) ;!Time, 
-  allocate( XLONG_V(south_north_stag, west_east)) ;!Time, 
-  allocate(     ZNU(bottom_top                 )) ;!Time, 
-  allocate(     ZNW(bottom_top_stag            )) ;!Time, 
-  allocate(      ZS(soil_layers_stag           )) ;!Time, 
-
-  !Coordinates:
-  call check( nf90_inq_varid(ncid,"Times"  , varid )); call check( nf90_get_var(ncid, varid , Times    ))  !"Times" 
-  call check( nf90_inq_varid(ncid,"ZS"     , varid )); call check( nf90_get_var(ncid, varid , ZS       ))  !"ZS"     
-  call check( nf90_inq_varid(ncid,"ZNU"    , varid )); call check( nf90_get_var(ncid, varid , ZNU      ))  !"ZNU"    
-  call check( nf90_inq_varid(ncid,"ZNW"    , varid )); call check( nf90_get_var(ncid, varid , ZNW      ))  !"ZNW"     
-  call check( nf90_inq_varid(ncid,"XLONG"  , varid )); call check( nf90_get_var(ncid, varid , XLONG    ))  !"XLONG" 
-  call check( nf90_inq_varid(ncid,"XLAT"   , varid )); call check( nf90_get_var(ncid, varid , XLAT     ))  !"XLAT"    
-  call check( nf90_inq_varid(ncid,"XLONG_U", varid )); call check( nf90_get_var(ncid, varid , XLONG_U  ))  !"XLONG_U" 
-  call check( nf90_inq_varid(ncid,"XLAT_U" , varid )); call check( nf90_get_var(ncid, varid , XLAT_U   ))  !"XLAT_U" 
-  call check( nf90_inq_varid(ncid,"XLONG_V", varid )); call check( nf90_get_var(ncid, varid , XLONG_V  ))  !"XLONG_V"
-  call check( nf90_inq_varid(ncid,"XLAT_V" , varid )); call check( nf90_get_var(ncid, varid , XLAT_V   ))  !"XLAT_V" 
-
-  !Variables:
-  do i=1,size(varList)
-  
-    if (allocated(var)) deallocate(var); allocate(var(south_nort, west_east))
-    call check( nf90_inq_varid(ncid,trim(varList(i)), varid )); call check( nf90_get_var(ncid, varid , var ))
-
-    if ( gridName(i) == 'M-Grid' ) then
-  
-
-  
-    else if ( gridName(i) == 'U-Grid' ) then  !u-wind grid
-
-  
-
-    else if ( gridName(i) == 'V-Grid' ) then  !v-wind grid
-  
-
-
-    else if ( gridName(i) == 'S-Grid' ) then  !soil grid
-  
-  
-  
-    endif
-  
-  
-  enddo
-
-
-call check(nf90_close(ncid))
-
+data varList( 1), varTyp( 1), gridTyp( 1) / "MAPFAC_UX", "float", "U-Grid" / !U-Grid
+data varList( 2), varTyp( 2), gridTyp( 2) / "MAPFAC_UY", "float", "U-Grid" / !U-Grid
+data varList( 3), varTyp( 3), gridTyp( 3) / "MAPFAC_VX", "float", "V-Grid" / !V-Grid
+data varList( 4), varTyp( 4), gridTyp( 4) / "MAPFAC_VY", "float", "V-Grid" / !V-Grid
+data varList( 5), varTyp( 5), gridTyp( 5) / "MAPFAC_MX", "float", "M-Grid" / 
+data varList( 6), varTyp( 6), gridTyp( 6) / "MAPFAC_MY", "float", "M-Grid" / 
+data varList( 7), varTyp( 7), gridTyp( 7) / "P_HYD    ", "float", "M-Grid" / 
+data varList( 8), varTyp( 8), gridTyp( 8) / "P_TOP    ", "float", "M-Grid" / 
+data varList( 9), varTyp( 9), gridTyp( 9) / "PH       ", "float", "M-Grid" / !bottom_top_stag 
+data varList(10), varTyp(10), gridTyp(10) / "PHB      ", "float", "M-Grid" / !bottom_top_stag
+data varList(11), varTyp(11), gridTyp(11) / "P        ", "float", "M-Grid" / 
+data varList(12), varTyp(12), gridTyp(12) / "PB       ", "float", "M-Grid" / 
+data varList(13), varTyp(13), gridTyp(13) / "U        ", "float", "U-Grid" / !U-grid
+data varList(14), varTyp(14), gridTyp(14) / "V        ", "float", "V-Grid" / !V-grid
+data varList(15), varTyp(15), gridTyp(15) / "W        ", "float", "W-Grid" / !W-grid
+data varList(16), varTyp(16), gridTyp(16) / "T        ", "float", "M-Grid" / 
+data varList(17), varTyp(17), gridTyp(17) / "QVAPOR   ", "float", "M-Grid" / 
+data varList(18), varTyp(18), gridTyp(18) / "QCLOUD   ", "float", "M-Grid" / 
+data varList(19), varTyp(19), gridTyp(19) / "QICE     ", "float", "M-Grid" / 
+data varList(20), varTyp(20), gridTyp(20) / "QRAIN    ", "float", "M-Grid" / 
+data varList(21), varTyp(21), gridTyp(21) / "QSNOW    ", "float", "M-Grid" / 
+data varList(22), varTyp(22), gridTyp(22) / "QGRAUP   ", "float", "M-Grid" / 
+data varList(23), varTyp(23), gridTyp(23) / "CLDFRA   ", "float", "M-Grid" / 
+data varList(24), varTyp(24), gridTyp(24) / "T2       ", "float", "M-Grid" / 
+data varList(25), varTyp(25), gridTyp(25) / "Q2       ", "float", "M-Grid" / 
+data varList(26), varTyp(26), gridTyp(26) / "U10      ", "float", "M-Grid" / 
+data varList(27), varTyp(27), gridTyp(27) / "V10      ", "float", "M-Grid" / 
+data varList(28), varTyp(28), gridTyp(28) / "PSFC     ", "float", "M-Grid" / 
+data varList(29), varTyp(29), gridTyp(29) / "RAINC    ", "float", "M-Grid" / 
+data varList(30), varTyp(30), gridTyp(30) / "RAINNC   ", "float", "M-Grid" / 
+data varList(31), varTyp(31), gridTyp(31) / "LANDMASK ", "float", "M-Grid" / 
+data varList(32), varTyp(32), gridTyp(32) / "HGT      ", "float", "M-Grid" / 
+data varList(33), varTyp(33), gridTyp(33) / "SST      ", "float", "M-Grid" / 
+data varList(34), varTyp(34), gridTyp(34) / "PBLH     ", "float", "M-Grid" / 
+data varList(35), varTyp(35), gridTyp(35) / "HFX      ", "float", "M-Grid" / 
+data varList(36), varTyp(36), gridTyp(36) / "LH       ", "float", "M-Grid" / 
+data varList(37), varTyp(37), gridTyp(37) / "LAI      ", "float", "M-Grid" / 
+data varList(38), varTyp(38), gridTyp(38) / "SWDOWN   ", "float", "M-Grid" / 
+data varList(39), varTyp(39), gridTyp(39) / "GLW      ", "float", "M-Grid" / 
+data varList(40), varTyp(40), gridTyp(40) / "LU_INDEX ", "float", "M-Grid" / 
+data varList(41), varTyp(41), gridTyp(41) / "ALBEDO   ", "float", "M-Grid" / 
+data varList(42), varTyp(42), gridTyp(42) / "SEAICE   ", "float", "M-Grid" / 
+data varList(43), varTyp(43), gridTyp(43) / "SNOW     ", "float", "M-Grid" / 
+data varList(44), varTyp(44), gridTyp(44) / "SMOIS    ", "float", "S-Grid" / 
+data varList(45), varTyp(45), gridTyp(45) / "SINALPHA ", "float", "M-Grid" / 
+data varList(46), varTyp(46), gridTyp(46) / "COSALPHA ", "float"  "M-Grid" / 
 

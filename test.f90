@@ -30,7 +30,9 @@ program test
    g1%ymin=-90   !
    g1%xmin=-180  !
    allocate(var1(g1%nx,g1%ny))
-   call makeFieldTest(g1,var1)            !dummy test field
+   !call makeFieldTest(g1,var1)            !dummy test field
+   call makeFieldTest2(g1,var1)            !sharp circle field test
+
    call saveArrayOnNetCDF(iFile,g1,var1)
    !***************************
    !dst grid specs (silam grid):
@@ -114,6 +116,33 @@ contains
            var(i, j) = 2.0 + cos(lon(i)*deg2rad)**2 * cos(2.0*lat(j)*deg2rad)
        end do
    endsubroutine
+
+   subroutine makeFieldTest2(g,var)
+       implicit none
+       type(regular_grid_type ) :: g
+       real                :: var(:,:)
+       real(8),allocatable    :: lat(:)
+       real(8),allocatable    :: lon(:)
+       integer :: i,j,stat!,nx,ny
+       real :: dist
+       real            :: pi=3.141593
+       real            :: deg2rad=3.141593/180.0
+       real            :: rad2deg=180.0/3.141593
+       allocate(lat(g%ny))
+       allocate(lon(g%nx))
+                                                                              
+       lon=[ (g%xmin+i*g%dx, i=1, g%nx,1) ] !lon=c(-180:180)
+       lat=[ (g%ymin+i*g%dy, i=1, g%ny,1) ] !lat=c(-90:90)
+       
+       ! Calculate the scalar field values using array operations
+       var=0.0
+       do concurrent (i = 1:g%nx, j = 1:g%ny)
+           dist=sqrt(lon(i)*lon(i)+lat(j)*lat(j))
+           if ( dist < 30                           ) var(i,j)=1.0
+           if ( abs(lon(i)) < 10 .and. lat(j) > -20 ) var(i,j)=0.0 
+       end do
+   endsubroutine
+
 
    subroutine saveArrayOnNetCDF(ncfile,g,var)
       implicit none
