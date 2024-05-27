@@ -1,0 +1,77 @@
+&grid_specs
+
+ iFile='/media/usuario/cnea_ram/WRFE/2023112400/01/wrfout_d01_2023-11-24_00_00_00', !'wrfout_d01_20XX-XX-XX_XX:00:00.nc'
+ oFile='./template/wrfout_base.nc',
+
+ !time
+ !start_date = '2019-09-04_12:00:00',
+ !end_date   = '2019-09-06_00:00:00',
+ !Times      = 25,       !# time steps
+
+ !grid         
+ nx =   99,      !west_east
+ ny =  149,      !south_north
+ nz =   44,      !bottom_top (met_levels)
+ soil_levels= 4, !soil_layers_stag
+ dx = 15000,
+ dy = 15000,
+ clon=-62.23,
+ clat=-38.73,
+
+ !proj
+ proj="+proj=lcc +a=6370000.0 +b=6370000.0 +lat_1=-33.721 +lat_2=-33.721 +lat_0=-38.73 +lon_0=-59.83",
+ !:CEN_LAT = -38.73f ;
+ !:CEN_LON = -62.23001f ;
+ !:TRUELAT1 = -33.721f ;
+ !:TRUELAT2 = -33.721f ;
+ !:MOAD_CEN_LAT = -38.73f ;
+ !:STAND_LON = -59.834f ;
+
+/
+!	Time = UNLIMITED ; // (25 currently)
+!	DateStrLen = 19 ;
+!	west_east = 99 ;
+!	south_north = 149 ;
+!	bottom_top = 44 ;
+!	klevs_for_dvel = 1 ;
+!	bottom_top_stag = 45 ;
+!	soil_layers_stag = 4 ;
+!	west_east_stag = 100 ;
+!	south_north_stag = 150 ;
+
+!&share
+! wrf_core = 'ARW',
+! max_dom = 2,
+! start_date = '2019-09-04_12:00:00','2019-09-04_12:00:00',
+! end_date   = '2019-09-06_00:00:00','2019-09-04_12:00:00',
+! interval_seconds = 10800
+!/
+!
+!&geogrid
+! parent_id         =   1,   1,
+! parent_grid_ratio =   1,   3,
+! i_parent_start    =   1,  53,
+! j_parent_start    =   1,  25,
+! e_we              =  150, 220,
+! e_sn              =  130, 214,
+! geog_data_res = 'default','default',
+! dx = 15000,
+! dy = 15000,
+! map_proj = 'lambert',
+! ref_lat   =  33.00,
+! ref_lon   = -79.00,
+! truelat1  =  30.0,
+! truelat2  =  60.0,
+! stand_lon = -79.0,
+! geog_data_path = '/glade/work/wrfhelp/WPS_GEOG/'
+!/
+!
+!&ungrib
+! out_format = 'WPS',
+! prefix = 'FILE',
+!/
+!
+!&metgrid
+! fg_name = 'FILE'
+!/
+

@@ -6,12 +6,12 @@ SE=serial
 
 LIBS=-L/usr/lib/x86_64-linux-gnu -lnetcdf -lnetcdff -lm -lproj -fopenmp
 INC=-I/usr/include
-FFLAGS=-O3 -ffree-line-length-none -x f95-cpp-input -DUSE_PROJ6 #-g -Wunused 
+FFLAGS=-O3 -ffree-line-length-none -x f95-cpp-input #-DUSE_PROJ6 #-g -Wunused 
 
 SCRIPDIR=SCRIP_src
 SCRIP_OBJS=SCRIP_KindsMod.o SCRIP_IOUnitsMod.o SCRIP_ErrorMod.o SCRIP_CommMod.o SCRIP_BroadcastMod.o SCRIP_InitMod.o SCRIP_ConfigMod.o constants.o SCRIP_NetcdfMod.o grids.o remap_vars.o timers.o remap_conservative.o remap_read.o remap_bilinear.o remap_distance_weight.o remap_mod.o remap_write.o remap_bicubic.o # SCRIP_RemapParticleMod.o
-OBJS = ${SCRIP_OBJS} proj.o SCRIP_mod.o test.o
-#OBJS = ${SCRIP_OBJS} proj.o SCRIP_mod.o remap_discrete.o test2.o
+#OBJS = ${SCRIP_OBJS} proj.o SCRIP_mod.o test.o
+OBJS = ${SCRIP_OBJS} proj.o SCRIP_mod.o wrf_test.o
 EXE  = a.out
 
 #all:
