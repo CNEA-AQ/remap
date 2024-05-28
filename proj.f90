@@ -50,7 +50,7 @@ module PROJ
   end interface
 
   interface PROJ_TRANS
-     module procedure proj_trans_multipt, proj_trans_pt
+     module procedure proj_trans_multipt, proj_trans_pt, proj_trans_2d
   end interface  PROJ_TRANS
 
 !character (len=*), public, parameter :: lonlat_proj4="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs" !EPSG:4326
@@ -108,5 +108,30 @@ subroutine proj_trans_pt(s_srs, t_srs, x, y)
     call proj_trans_multipt(s_srs,t_srs,xa,ya)!,1)
     x=xa(1);y=ya(1)
  end subroutine
+
+subroutine proj_trans_2d(s_srs, t_srs, xx, yy)
+    !      
+    ! same that proj_trans but for a single value
+    implicit none
+    character(len=*), intent(in) :: s_srs, t_srs  !source & target spatial reference system (srs) (proj4str, epsgs, wkt, etc.)
+    real(8),dimension(:,:), target, intent(inout) ::xx,yy !coordinates to transform
+    real(8),dimension(:),allocatable              :: x, y !coordinates to transform
+    character (len=*), parameter :: sub_name='ll2proj_pt'
+    integer                      :: nx,ny
+    nx=size(xx,1)
+    ny=size(xx,2)
+    allocate(x(nx*ny))
+    allocate(y(nx*ny))
+    x=reshape(xx,[nx*ny])
+    y=reshape(yy,[nx*ny])
+    call proj_trans_multipt(s_srs,t_srs,x,y)!,1)
+    xx=reshape(x,[nx,ny])
+    yy=reshape(y,[nx,ny])
+end subroutine
+
+
+
+
+
 
 end module PROJ
