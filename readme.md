@@ -72,7 +72,10 @@ donde:
 
 - [ ] Terminar la versión `standalone`
 - [ ] Dar soporte para remapeo de archivos de wrf directamente.
-- [ ] Producir los `grid_types` a partir de leer el archivo de entrada (wrf, cmaq o griddesc).
 - [ ] Dar soporte a grillas logicamente no regulares.
+- [ ] Producir los `grid_types` a partir de leer el archivo de entrada (wrf, cmaq o griddesc).
 
-
+- [ ] Test rempaeo de WRF:
+  + [x] a. agregar soporte a wildcards para iFile (<date>,<time>). 
+  + [ ] b. calcular eta values en base a info de `ptop` y `e_levels`.
+  + [ ] c.  

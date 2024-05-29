@@ -1,26 +1,23 @@
 &grid_specs
 
- iFile='/media/usuario/cnea_ram/WRFE/2023112400/01/wrfout_d01_2023-11-24_00_00_00', !'wrfout_d01_20XX-XX-XX_XX:00:00.nc'
+ !iFile='/media/usuario/cnea_ram/WRFE/2023112400/01/wrfout_d01_2023-11-24_00_00_00', !'wrfout_d01_20XX-XX-XX_XX:00:00.nc'
+ iFile='/home/ram/data/wrfout_d01_<date>_<time>.nc'
  oFile='./template.nc',
- !iFile='/media/usuario/cnea_ram/WRFE/2023112400/01/wrfout_d01_<date>_<time>',
- !oFile='./outs/wrfout_d01_<date>.nc',
 
  !time
- !start_date = '2019-09-04_12:00:00',
- !end_date   = '2019-09-06_00:00:00',
- !Times      = 25,       !# time steps
+ start_date="2023-11-24 00:00:00",
+ end_date  ="2023-11-24 05:00:00",
 
  !grid         
  nx =   99,      !west_east
  ny =  149,      !south_north
- nz =   44,      !bottom_top (met_levels)
- soil_levels= 4, !soil_layers_stag
+ nz =   44,      !bottom_top (met_levels) !debe coincidir con el de iFile!
+ soil_levels= 4, !soil_layers_stag        !debe coincidir con el de iFile!
  dx = 15000,
  dy = 15000,
  clon=-62.23,
  clat=-38.73,
+
  !proj
  proj="+proj=lcc +a=6370000.0 +b=6370000.0 +lat_1=-33.721 +lat_2=-33.721 +lat_0=-38.73 +lon_0=-59.83",
-
-
 /
