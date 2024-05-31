@@ -1,7 +1,7 @@
 
-character(len=*) :: varList(46)
-character(len=*) ::  varTyp(46) !'int','float','double'
-character(len=*) :: gridTyp(46) !'M-grid'    = "XLONG XLAT XTIME" 
+character(len=9) ::  varList(46)
+character(len=5) ::  varType(46) !'int','float','double'
+character(len=1) :: gridType(46) !'M-grid'    = "XLONG XLAT XTIME" 
                                 !'U-grid'    = (bottom_top     , south_north     , west_east_stag)
                                 !'V-grid'    = (bottom_top     , south_north_stag, west_east     )
                                 !'W-grid'    = (bottom_top_stag, south_north_stag, west_east     )
@@ -12,51 +12,50 @@ character(len=*) :: gridTyp(46) !'M-grid'    = "XLONG XLAT XTIME"
 
 character(len=2) :: gridDim(46) !'2D' '3D'
 
-
 !1D: Times, ZNU, ZNW, ZS, P_TOP 
- data varList( 1), varTyp( 1), gridTyp( 1), gridDim( 1) / "MAPFAC_UX", "float", "U-Grid" , "2D" / !U-Grid
- data varList( 2), varTyp( 2), gridTyp( 2), gridDim( 2) / "MAPFAC_UY", "float", "U-Grid" , "2D" / !U-Grid
- data varList( 3), varTyp( 3), gridTyp( 3), gridDim( 3) / "MAPFAC_VX", "float", "V-Grid" , "2D" / !V-Grid
- data varList( 4), varTyp( 4), gridTyp( 4), gridDim( 4) / "MAPFAC_VY", "float", "V-Grid" , "2D" / !V-Grid
- data varList( 5), varTyp( 5), gridTyp( 5), gridDim( 5) / "MAPFAC_MX", "float", "M-Grid" , "2D" / 
- data varList( 6), varTyp( 6), gridTyp( 6), gridDim( 6) / "MAPFAC_MY", "float", "M-Grid" , "2D" / 
- data varList( 7), varTyp( 7), gridTyp( 7), gridDim( 7) / "T2       ", "float", "M-Grid" , "2D" / 
- data varList( 8), varTyp( 8), gridTyp( 8), gridDim( 8) / "Q2       ", "float", "M-Grid" , "2D" / 
- data varList( 9), varTyp( 9), gridTyp( 9), gridDim( 9) / "U10      ", "float", "M-Grid" , "2D" / 
- data varList(10), varTyp(10), gridTyp(10), gridDim(10) / "V10      ", "float", "M-Grid" , "2D" / 
- data varList(11), varTyp(11), gridTyp(11), gridDim(11) / "PSFC     ", "float", "M-Grid" , "2D" / 
- data varList(12), varTyp(12), gridTyp(12), gridDim(12) / "RAINC    ", "float", "M-Grid" , "2D" / 
- data varList(13), varTyp(13), gridTyp(13), gridDim(13) / "RAINNC   ", "float", "M-Grid" , "2D" / 
- data varList(14), varTyp(14), gridTyp(14), gridDim(14) / "LANDMASK ", "float", "M-Grid" , "2D" / 
- data varList(15), varTyp(15), gridTyp(15), gridDim(15) / "HGT      ", "float", "M-Grid" , "2D" / 
- data varList(16), varTyp(16), gridTyp(16), gridDim(16) / "SST      ", "float", "M-Grid" , "2D" / 
- data varList(17), varTyp(17), gridTyp(17), gridDim(17) / "PBLH     ", "float", "M-Grid" , "2D" / 
- data varList(18), varTyp(18), gridTyp(18), gridDim(18) / "HFX      ", "float", "M-Grid" , "2D" / 
- data varList(19), varTyp(19), gridTyp(19), gridDim(19) / "LH       ", "float", "M-Grid" , "2D" / 
- data varList(20), varTyp(20), gridTyp(20), gridDim(20) / "LAI      ", "float", "M-Grid" , "2D" / 
- data varList(21), varTyp(21), gridTyp(21), gridDim(21) / "SWDOWN   ", "float", "M-Grid" , "2D" / 
- data varList(22), varTyp(22), gridTyp(22), gridDim(22) / "GLW      ", "float", "M-Grid" , "2D" / 
- data varList(23), varTyp(23), gridTyp(23), gridDim(23) / "LU_INDEX ", "int  ", "M-Grid" , "2D" /  !categorical
- data varList(24), varTyp(24), gridTyp(24), gridDim(24) / "ALBEDO   ", "float", "M-Grid" , "2D" / 
- data varList(25), varTyp(25), gridTyp(25), gridDim(25) / "SEAICE   ", "float", "M-Grid" , "2D" / 
- data varList(26), varTyp(26), gridTyp(26), gridDim(26) / "SNOW     ", "float", "M-Grid" , "2D" / 
- data varList(27), varTyp(27), gridTyp(27), gridDim(27) / "SINALPHA ", "float", "M-Grid" , "2D" / 
- data varList(28), varTyp(28), gridTyp(28), gridDim(28) / "COSALPHA ", "float"  "M-Grid"   "2D" / 
- data varList(29), varTyp(29), gridTyp(29), gridDim(29) / "P_HYD    ", "float", "M-Grid" , "3D" / !3D
- data varList(30), varTyp(30), gridTyp(30), gridDim(30) / "PH       ", "float", "W-Grid" , "3D" / !bottom_top_stag 
- data varList(31), varTyp(31), gridTyp(31), gridDim(31) / "PHB      ", "float", "W-Grid" , "3D" / !bottom_top_stag
- data varList(32), varTyp(32), gridTyp(32), gridDim(32) / "P        ", "float", "M-Grid" , "3D" / 
- data varList(33), varTyp(33), gridTyp(33), gridDim(33) / "PB       ", "float", "M-Grid" , "3D" / 
- data varList(34), varTyp(34), gridTyp(34), gridDim(34) / "U        ", "float", "U-Grid" , "3D" / !U-grid
- data varList(35), varTyp(35), gridTyp(35), gridDim(35) / "V        ", "float", "V-Grid" , "3D" / !V-grid
- data varList(36), varTyp(36), gridTyp(36), gridDim(36) / "W        ", "float", "W-Grid" , "3D" / !W-grid
- data varList(37), varTyp(37), gridTyp(37), gridDim(37) / "T        ", "float", "M-Grid" , "3D" / 
- data varList(38), varTyp(38), gridTyp(38), gridDim(38) / "QVAPOR   ", "float", "M-Grid" , "3D" / 
- data varList(39), varTyp(39), gridTyp(39), gridDim(39) / "QCLOUD   ", "float", "M-Grid" , "3D" / 
- data varList(40), varTyp(40), gridTyp(40), gridDim(40) / "QICE     ", "float", "M-Grid" , "3D" / 
- data varList(41), varTyp(41), gridTyp(41), gridDim(41) / "QRAIN    ", "float", "M-Grid" , "3D" / 
- data varList(42), varTyp(42), gridTyp(42), gridDim(42) / "QSNOW    ", "float", "M-Grid" , "3D" / 
- data varList(43), varTyp(43), gridTyp(43), gridDim(43) / "QGRAUP   ", "float", "M-Grid" , "3D" / 
- data varList(44), varTyp(44), gridTyp(44), gridDim(44) / "CLDFRA   ", "float", "M-Grid" , "3D" / !3D
- data varList(45), varTyp(45), gridTyp(45), gridDim(45) / "SMOIS    ", "float", "S-Grid" , "3D" / 
+ data varList( 1), varType( 1), gridType( 1), gridDim( 1) / "MAPFAC_UX", "float", "U" , "2D" / !U-Grid
+ data varList( 2), varType( 2), gridType( 2), gridDim( 2) / "MAPFAC_UY", "float", "U" , "2D" / !U-Grid
+ data varList( 3), varType( 3), gridType( 3), gridDim( 3) / "MAPFAC_VX", "float", "V" , "2D" / !V-Grid
+ data varList( 4), varType( 4), gridType( 4), gridDim( 4) / "MAPFAC_VY", "float", "V" , "2D" / !V-Grid
+ data varList( 5), varType( 5), gridType( 5), gridDim( 5) / "MAPFAC_MX", "float", "M" , "2D" / 
+ data varList( 6), varType( 6), gridType( 6), gridDim( 6) / "MAPFAC_MY", "float", "M" , "2D" / 
+ data varList( 7), varType( 7), gridType( 7), gridDim( 7) / "T2       ", "float", "M" , "2D" / 
+ data varList( 8), varType( 8), gridType( 8), gridDim( 8) / "Q2       ", "float", "M" , "2D" / 
+ data varList( 9), varType( 9), gridType( 9), gridDim( 9) / "U10      ", "float", "M" , "2D" / 
+ data varList(10), varType(10), gridType(10), gridDim(10) / "V10      ", "float", "M" , "2D" / 
+ data varList(11), varType(11), gridType(11), gridDim(11) / "PSFC     ", "float", "M" , "2D" / 
+ data varList(12), varType(12), gridType(12), gridDim(12) / "RAINC    ", "float", "M" , "2D" / 
+ data varList(13), varType(13), gridType(13), gridDim(13) / "RAINNC   ", "float", "M" , "2D" / 
+ data varList(14), varType(14), gridType(14), gridDim(14) / "LANDMASK ", "float", "M" , "2D" / 
+ data varList(15), varType(15), gridType(15), gridDim(15) / "HGT      ", "float", "M" , "2D" / 
+ data varList(16), varType(16), gridType(16), gridDim(16) / "SST      ", "float", "M" , "2D" / 
+ data varList(17), varType(17), gridType(17), gridDim(17) / "PBLH     ", "float", "M" , "2D" / 
+ data varList(18), varType(18), gridType(18), gridDim(18) / "HFX      ", "float", "M" , "2D" / 
+ data varList(19), varType(19), gridType(19), gridDim(19) / "LH       ", "float", "M" , "2D" / 
+ data varList(20), varType(20), gridType(20), gridDim(20) / "LAI      ", "float", "M" , "2D" / 
+ data varList(21), varType(21), gridType(21), gridDim(21) / "SWDOWN   ", "float", "M" , "2D" / 
+ data varList(22), varType(22), gridType(22), gridDim(22) / "GLW      ", "float", "M" , "2D" / 
+ data varList(23), varType(23), gridType(23), gridDim(23) / "LU_INDEX ", "int  ", "M" , "2D" /  !categorical
+ data varList(24), varType(24), gridType(24), gridDim(24) / "ALBEDO   ", "float", "M" , "2D" / 
+ data varList(25), varType(25), gridType(25), gridDim(25) / "SEAICE   ", "float", "M" , "2D" / 
+ data varList(26), varType(26), gridType(26), gridDim(26) / "SNOW     ", "float", "M" , "2D" / 
+ data varList(27), varType(27), gridType(27), gridDim(27) / "SINALPHA ", "float", "M" , "2D" / 
+ data varList(28), varType(28), gridType(28), gridDim(28) / "COSALPHA ", "float", "M" , "2D" / 
+ data varList(29), varType(29), gridType(29), gridDim(29) / "P_HYD    ", "float", "M" , "3D" / !3D
+ data varList(30), varType(30), gridType(30), gridDim(30) / "PH       ", "float", "W" , "3D" / !bottom_top_stag 
+ data varList(31), varType(31), gridType(31), gridDim(31) / "PHB      ", "float", "W" , "3D" / !bottom_top_stag
+ data varList(32), varType(32), gridType(32), gridDim(32) / "P        ", "float", "M" , "3D" / 
+ data varList(33), varType(33), gridType(33), gridDim(33) / "PB       ", "float", "M" , "3D" / 
+ data varList(34), varType(34), gridType(34), gridDim(34) / "U        ", "float", "U" , "3D" / !U-grid
+ data varList(35), varType(35), gridType(35), gridDim(35) / "V        ", "float", "V" , "3D" / !V-grid
+ data varList(36), varType(36), gridType(36), gridDim(36) / "W        ", "float", "W" , "3D" / !W-grid
+ data varList(37), varType(37), gridType(37), gridDim(37) / "T        ", "float", "M" , "3D" / 
+ data varList(38), varType(38), gridType(38), gridDim(38) / "QVAPOR   ", "float", "M" , "3D" / 
+ data varList(39), varType(39), gridType(39), gridDim(39) / "QCLOUD   ", "float", "M" , "3D" / 
+ data varList(40), varType(40), gridType(40), gridDim(40) / "QICE     ", "float", "M" , "3D" / 
+ data varList(41), varType(41), gridType(41), gridDim(41) / "QRAIN    ", "float", "M" , "3D" / 
+ data varList(42), varType(42), gridType(42), gridDim(42) / "QSNOW    ", "float", "M" , "3D" / 
+ data varList(43), varType(43), gridType(43), gridDim(43) / "QGRAUP   ", "float", "M" , "3D" / 
+ data varList(44), varType(44), gridType(44), gridDim(44) / "CLDFRA   ", "float", "M" , "3D" / !3D
+ data varList(45), varType(45), gridType(45), gridDim(45) / "SMOIS    ", "float", "S" , "3D" / 
 

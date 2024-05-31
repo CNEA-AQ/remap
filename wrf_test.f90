@@ -5,6 +5,9 @@ program test
   use SCRIP
 
   implicit none
+
+  include 'tables/wrf.ext'
+
   character(100), parameter :: proj_latlon = "+proj=latlong +a=6370000.0 +b=6370000.0"
   type(regular_grid_type )  :: g1, g2  !src dst
 
@@ -15,14 +18,21 @@ program test
   real               :: dx,dy,clon,clat
   character(100)     :: proj
 
-  !misc
+  !interm variables:
   real(8)            :: xcent, ycent
-  !character(len=256):: method
-  integer            :: time,n_hours,soil_levels
+  character(len=16):: method='conservative'
+  integer            :: times,n_hours,soil_levels
   character(10)      :: date_str
   character(8)       :: time_str
-  integer :: iostat
-  real, dimension(:,:,:,:) :: var1, var2    
+  type(regular_grid_type )  :: gg1, gg2  !src dst
+  real,allocatable   :: var1(:,:,:,:), var2(:,:,:,:)    
+  !real,allocatable   :: var1_3d(:,:,:,:), var2_3d(:,:,:,:)    
+  integer      :: iostat, stat, ncid, ncid_out, varId
+  integer      :: i,j,k,t,z
+  character(9) :: varNam
+  character(5) :: varTyp
+  character(1) :: grdTyp
+  character(2) :: grdDim
 
   namelist/grid_specs/iFile,oFile, start_date,end_date, nx,ny,nz,soil_levels, dx,dy,clon,clat, proj
   
@@ -50,7 +60,7 @@ program test
    iFile=replace(iFile,'<date>', date_str)
    iFile=replace(iFile,'<time>', time_str)
    print*,iFile
-   call get_wrf_grid_and_proj(trim(iFile), g1, time, soil_levels)
+   call get_wrf_grid_and_proj(trim(iFile), g1, Times, soil_levels)
  
    !debug:
    call print_grid_values(g1)  !debug
@@ -64,69 +74,74 @@ program test
 !(3) Remap variables:
    n_hours=(atoi(date(end_date,"%s"))-atoi(date(start_date,"%s")))/(60*60)
    print*,"# hours:", n_hours
-   !allocate(var1(g1%nx,g1%ny))
-   !allocate(var2(g2%nx,g2%ny))
+   call check(nf90_open(trim(iFile), nf90_nowrite, ncid ))
+   call check(nf90_open(trim(oFile), nf90_write  , ncid_out ))
 
-   call check(nf90_open(trim(iFile), nf90_read, ncid ))
+   gg1=g1 !backup grid
+   gg2=g2 !backup grid
+   
+   !scan every variable:
+   do i=1,size(varList)
 
-   do i=1,size(var_list)
+   print*, "Variable: ",trim(varList(i))
+       varNam =  varList(i)   !
+       varTyp =  varType(i)   ! "float", "int"
+       grdTyp = gridType(i)   ! (M,U,V,W,S)
+       grdDim =  gridDim(i)   ! "2D","3D" (+ time dim)
 
-       gridDim = grid_dims(i)   ! "2D","3D" (+ time dim)
-      gridType = grid_type(i)   ! (M,U,V,W,S)_GRID
-       varType =  var_type(i)   ! float, int
-       varName =  var_list(i)   !
+      g1=gg1                      !current grid
+      g2=gg2                      !current grid
 
-      g=g1                      !current grid
-
-      select case (trim(gridType))
-         case ("U-GRID")
-              g%gridName='U'//trim(gridDim)
-              g%nx=g%nx+1
-              g%xmin=g%xmin-g%dx
-              g%xmax=g%xmax+g%dx
-         case ("V-GRID")
-              g%gridName='V'//trim(gridDim)
-              g%ny=g%ny+1
-              g%ymin=g%ymin-g%dy
-              g%ymax=g%ymax+g%dy
-         case ("W-GRID")
-              g%gridName='V'//trim(gridDim)
-              g%ny=g%ny+1
-              g%ymin=g%ymin-g%dy
-              g%ymax=g%ymax+g%dy
-         case ("S-GRID")
-              g%gridName='V'//trim(gridDim)
-              g%nz=size(soil_levels)
+      g1%gridName=trim(grdTyp)//"_src"
+      g2%gridName=trim(grdTyp)//"_dst"
+      select case (trim(grdTyp))
+         case ("U")
+           g1%nx  =g1%nx+1       ; g2%nx=g2%nx+1
+           g1%xmin=g1%xmin-g1%dx ; g2%xmin=g2%xmin-g2%dx
+           g1%xmax=g1%xmax+g1%dx ; g2%xmax=g2%xmax+g2%dx
+         case ("V")
+           g1%ny  =g1%ny+1       ; g2%ny  =g2%ny+1
+           g1%ymin=g1%ymin-g1%dy ; g2%ymin=g2%ymin-g2%dy
+           g1%ymax=g1%ymax+g1%dy ; g2%ymax=g2%ymax+g2%dy
+         case ("W")
+           g1%nz=g1%nz+1         ; g2%nz=g1%nz+1
+         case ("S")
+           g1%nz=soil_levels     ; g2%nz=soil_levels       
          case default  !M-GRID
-              g%gridName='M'//trim(gridDim)
+           continue
       end select 
 
-      if (allocated(var1)) deallocate(var1); allocate(var1( g%nx, g%ny,g%nz,Times))  !VER BIEN ESTO
-      if (allocated(var2)) deallocate(var2); allocate(var2(g2%nx,g2%ny,g%nz,Times))  !VER BIEN ESTO
+      if (grdDim == "2D") g1%nz=1;
+      if (grdDim == "2D") g2%nz=1;
 
-      call check( nf90_inq_varid(ncid,trim(varName), varid ))
+      if (allocated(var1)) deallocate(var1); allocate(var1(g1%nx,g1%ny,g1%nz,Times))  !VER BIEN ESTO
+      if (allocated(var2)) deallocate(var2); allocate(var2(g2%nx,g2%ny,g2%nz,Times))  !VER BIEN ESTO
+
+      call check( nf90_inq_varid(ncid,trim(varNam), varid ))
 
       do t=1,Times
-         select case(type_list(i))
+         select case( grdDim )
            case ("2D")
-             call check(nf90_get_var (ncid, varid, var1(:,:,1,t), start=(/1,1,t/),count=(/nx,ny,1/)) ) 
-             call SCRIP_remap_field(var1,var2,g1,g2,method)
+             call check(nf90_get_var (ncid, varid, var1(:,:,1,t), start=[1,1,t],count=[g1%nx,g1%ny,1]) ) 
+             call SCRIP_remap_field(var1(:,:,1,t),var2(:,:,1,t),g1,g2,method)
            case ("3D")
-             do z=1,grid%nz
-                call check(nf90_get_var (ncid, varid, var1(:,:,z,t), start=(/1,1,z,t/),count=(/nx,ny,1,1/)) ) 
-                call SCRIP_remap_field(var1,var2,g1,g2,method)
+             do z=1,g1%nz
+                call check(nf90_get_var (ncid, varid, var1(:,:,z,t), start=(/1,1,z,t/),count=[g1%nx,g1%ny,1,1] ) ) 
+                call SCRIP_remap_field(var1(:,:,z,t),var2(:,:,z,t),g1,g2,method)
              enddo
            case default
              stop 'grid dimension not found.'
          end select
       enddo
 
-      call save_variable_in_netcdf(oFile, varName(i), var2, g2)
+      stat=nf90_inq_varid(ncid_out, trim(varNam) , varId)
+      if (grdDim=="2D") stat=nf90_put_var(ncid_out, varId, var2(:,:,1,:))
+      if (grdDim=="3D") stat=nf90_put_var(ncid_out, varId, var2(:,:,:,:))
 
-      deallocate(tmp)
    enddo
 
    call check(nf90_close(ncid))
+   call check(nf90_close(ncid_out))
 
    print*, "Fin de la prueba."
 
@@ -205,6 +220,7 @@ subroutine get_wrf_grid_and_proj(wrf_file,g,Time, soil_layers_stag)
     integer :: proj_id
     real(8) :: xcent, ycent
     integer :: ncid,dimid
+    integer ::i,j
     !grid
     !integer :: south_north,west_east,bottom_top,time
     !integer :: dx,dy 
@@ -252,6 +268,22 @@ subroutine get_wrf_grid_and_proj(wrf_file,g,Time, soil_layers_stag)
     g%xmax=xcent + g%dx *0.5* g%nx
     g%ymin=ycent - g%dy *0.5* g%ny
     g%ymax=ycent + g%dy *0.5* g%ny
+
+
+    !DEBUG!
+  !open(unit=5,file='src.csv',action='write',access='sequential')
+  ! write(5,'("id;WKT")')
+  ! do i=1,g%nx
+  !    do j=1,g%ny
+  !     xcent=g%xmin+0.5*g%dx+g%dx*i
+  !     ycent=g%ymin+0.5*g%dy+g%dy*j
+  !     call proj_trans(g2%proj4, proj_latlon, xcent,ycent )
+  !     write(5,'(I4,"; POINT (",F12.7,F12.7,")")') i+j,xcent,ycent
+  ! enddo
+  ! enddo
+  ! close(5)
+  !  !DEBUG!
+
 end subroutine
 
 
@@ -268,6 +300,7 @@ end subroutine
 
       integer :: ncid,varid
       integer :: dim_dateStr,dim_Time,dim_x,dim_y,dim_z ,dim_x_stag ,dim_y_stag ,dim_z_stag ,dim_soil 
+      integer :: xid,yid,zid
 
       integer :: soilLayers=4
       allocate(  Times( 24)              ) !daily files
@@ -329,6 +362,29 @@ end subroutine
           stat=nf90_def_var(ncid, "XLAT_U" ,  NF90_FLOAT, [dim_x_stag, dim_y]   , varId )
           stat=nf90_def_var(ncid, "XLONG_V",  NF90_FLOAT, [dim_x, dim_y_stag]   , varId )
           stat=nf90_def_var(ncid, "XLAT_V" ,  NF90_FLOAT, [dim_x, dim_y_stag]   , varId )
+
+          stat=nf90_def_var(ncid, "x"    ,  NF90_FLOAT, [dim_x, dim_y]        , varId )
+          stat=nf90_def_var(ncid, "y"    ,  NF90_FLOAT, [dim_x, dim_y]        , varId )
+          !def list variables:
+          do i=1,size(varList)
+
+             select case ( gridDim(i) )
+             case('2D')
+                 xid=dim_x; yid=dim_y
+                 if (gridType(i) == "U") xid=dim_x_stag;
+                 if (gridType(i) == "V") yid=dim_y_stag;
+                 stat=nf90_def_var(ncid, trim(varList(i)), NF90_FLOAT, [xid, yid, dim_time], varId )
+             
+             case('3D')
+                 xid=dim_x; yid=dim_y; zid=dim_z
+                 if (gridType(i) == "U") xid=dim_x_stag;
+                 if (gridType(i) == "V") yid=dim_y_stag;
+                 if (gridType(i) == "W") zid=dim_z_stag;
+                 if (gridType(i) == "S") zid=dim_soil  ;
+
+                 stat=nf90_def_var(ncid, trim(varList(i)), NF90_FLOAT, [xid,yid,zid, dim_time], varId )
+             end select
+          end do
           !stat=nf90_put_att(ncid, var_id, "units"          , "g/s"                 )
           !stat=nf90_put_att(ncid, var_id, "long_name"      , "var mass flux"       )
       stat=nf90_enddef(ncid)
@@ -345,7 +401,22 @@ end subroutine
          stat=nf90_inq_varid(ncid, "XLAT_U" , varId); stat=nf90_put_var(ncid, varId, XLAT_U  ) 
          stat=nf90_inq_varid(ncid, "XLONG_V", varId); stat=nf90_put_var(ncid, varId, XLONG_V ) 
          stat=nf90_inq_varid(ncid, "XLAT_V" , varId); stat=nf90_put_var(ncid, varId, XLAT_V  ) 
+
+         stat=nf90_inq_varid(ncid, "x"      , varId); stat=nf90_put_var(ncid, varId, XLONG   ) 
+         stat=nf90_inq_varid(ncid, "y"      , varId); stat=nf90_put_var(ncid, varId, XLAT    ) 
       stat=nf90_close(ncid)
+
+      !DEBUG!
+      open(unit=5,file='dst.csv',action='write',access='sequential')
+      write(5,'("id;WKT")')
+      do i=1,g2%nx
+         do j=1,g2%ny
+          write(5,'(I4,"; POINT (",F12.7,F12.7,")")') i+j,XLONG(i,j),XLAT(i,j) 
+      end do
+      end do
+      close(5)
+      !DEBUG!
+      !
       !Cierro NetCDF outFile
    end subroutine
 
